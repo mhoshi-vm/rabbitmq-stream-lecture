@@ -24,12 +24,16 @@ rm -f $HOME/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist
 
 # re-install
 brew install rabbitmq
+```
 
+インストール後、以下のコマンドでフィーチャーを全て有効化します。
+
+```
 ## start the service if necessary
-# brew services start rabbitmq
+brew services start rabbitmq
 
 ## after starting the service, enable all feature flags
-# /opt/homebrew/sbin/rabbitmqctl enable_feature_flag all
+/opt/homebrew/sbin/rabbitmqctl enable_feature_flag all
 ```
 
 # RabbitMQ Managment Console にログイン
