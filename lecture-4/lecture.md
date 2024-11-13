@@ -1,1 +1,5 @@
-Shovel とかを TBD
+Observability について
+
+```
+brew install zipkin
+```

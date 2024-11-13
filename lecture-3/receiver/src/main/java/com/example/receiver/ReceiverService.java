@@ -17,7 +17,7 @@ class ReceiverService {
         this.receiverRepository = receiverRepository;
     }
 
-    @RabbitListener(queues = "stream1", containerFactory = "nativeFactory")
+    @RabbitListener(queues = "stream1")
     void test(Message in) throws JsonProcessingException {
         ReceiverRecord record = new ObjectMapper().readValue(new String(in.getBodyAsBinary()), ReceiverRecord.class);
         receiverRepository.save(record);
