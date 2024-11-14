@@ -3,6 +3,8 @@ package com.example.receiver;
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,15 +16,15 @@ import org.springframework.rabbit.stream.support.StreamAdmin;
 class ReceiverConfiguration {
 
     @Bean
-    StreamAdmin streamAdmin(Environment environment){
+    StreamAdmin streamAdmin(Environment environment, CachingConnectionFactory cachingConnectionFactory){
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(cachingConnectionFactory);
         return new StreamAdmin(environment, streamCreator -> {
             streamCreator.stream("stream1").create();
+            rabbitAdmin.declareBinding(BindingBuilder.bind(new Queue("stream1")).to(new FanoutExchange("handson")));
+            rabbitAdmin.initialize();
         });
     }
-    @Bean
-    Binding binding(){
-        return new Binding("stream1", Binding.DestinationType.QUEUE, "handson", "", null);
-    }
+
     @Bean
     RabbitListenerContainerFactory<StreamListenerContainer> rabbitListenerContainerFactory(Environment env) {
         var factory = new StreamRabbitListenerContainerFactory(env);

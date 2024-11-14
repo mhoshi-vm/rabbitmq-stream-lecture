@@ -3,6 +3,7 @@ package com.example.observability;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.Message;
+import com.rabbitmq.stream.MessageHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.ListCrudRepository;

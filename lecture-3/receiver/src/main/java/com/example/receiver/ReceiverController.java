@@ -15,7 +15,7 @@ class ReceiverController {
     }
 
     @GetMapping
-    List<ReceiverRecord> getAll(){
+    List<ReceiverEntity> getAll(){
        return receiverService.findAll();
     }
 
