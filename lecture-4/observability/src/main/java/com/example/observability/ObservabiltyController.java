@@ -18,7 +18,6 @@ class ObservabilityController {
 
     ObservabilityRepository observabilityRepository;
 
-
     public ObservabilityController(ObservabilityRepository observabilityRepository) {
         this.observabilityRepository = observabilityRepository;
     }
