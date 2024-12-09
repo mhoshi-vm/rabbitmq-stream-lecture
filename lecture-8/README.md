@@ -44,4 +44,4 @@ SCS では自動的に、`<関数名>-<in or out>-<番号>` の Exchange や Bin
 
 以下のイメージ図です。
 
-![](img/689f72b0.png)
+![](img/34c00be7.png)
