@@ -22,14 +22,13 @@ class TestcontainersConfiguration {
     @ServiceConnection
     RabbitMQContainer rabbitContainer() {
         return new RabbitMQContainer(DockerImageName.parse("rabbitmq:management-alpine"))
-                .withExposedPorts(5672, 15672, 5552)
-                .withEnv("RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS", "-rabbitmq_stream advertised_host localhost");
+                .withExposedPorts(5672, 15672, 5552);
     }
 
     @Bean
     DynamicPropertyRegistrar dynamicPropertyRegistrar(RabbitMQContainer rabbitMQContainer) {
         return registry -> {
-            registry.add("spring.rabbitmq.stream.host", () -> "localhost");
+            registry.add("spring.rabbitmq.stream.host", rabbitMQContainer::getHost);
             registry.add("spring.rabbitmq.stream.username", rabbitMQContainer::getAdminUsername);
             registry.add("spring.rabbitmq.stream.password", rabbitMQContainer::getAdminPassword);
             registry.add("spring.rabbitmq.stream.port", () -> rabbitMQContainer.getMappedPort(5552));
