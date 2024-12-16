@@ -7,13 +7,17 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.testcontainers.containers.RabbitMQContainer;
 
+import java.io.IOException;
 import java.util.List;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest
 class IntTest {
 
+    @Autowired
+    RabbitMQContainer rabbitMQContainer;
 
     @Autowired
     RabbitTemplate rabbitTemplate;
@@ -22,7 +26,8 @@ class IntTest {
     SimpleStream simpleStream;
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException, InterruptedException {
+
     }
 
     @Test
