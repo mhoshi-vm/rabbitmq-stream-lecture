@@ -15,14 +15,17 @@ class ReceiverService {
 
     ReceiverRepository receiverRepository;
 
-    public ReceiverService(ReceiverRepository receiverRepository) {
+    ObjectMapper objectMapper;
+
+    public ReceiverService(ReceiverRepository receiverRepository, ObjectMapper objectMapper) {
         this.receiverRepository = receiverRepository;
+        this.objectMapper = objectMapper;
     }
 
     @RabbitListener(queues = "stream1")
     void test(Message in, MessageHandler.Context context) throws JsonProcessingException {
 
-        ReceiverEntity record = new ObjectMapper().readValue(new String(in.getBodyAsBinary()), ReceiverEntity.class);
+        ReceiverEntity record = this.objectMapper.readValue(new String(in.getBodyAsBinary()), ReceiverEntity.class);
         record.setDemoId(context.offset());
         record.setDemoTimestamp(new Date(context.timestamp()));
 

@@ -3,7 +3,6 @@ package com.example.observability;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.stream.Message;
-import com.rabbitmq.stream.MessageHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.ListCrudRepository;
@@ -18,13 +17,16 @@ class ObservabilityController {
 
     ObservabilityRepository observabilityRepository;
 
-    public ObservabilityController(ObservabilityRepository observabilityRepository) {
+    ObjectMapper objectMapper;
+
+    public ObservabilityController(ObservabilityRepository observabilityRepository, ObjectMapper objectMapper) {
         this.observabilityRepository = observabilityRepository;
+        this.objectMapper = objectMapper;
     }
 
     @RabbitListener(queues = "stream1")
     void Listener(Message in) throws JsonProcessingException {
-        ObservabilityRecord observabilityRecord = new ObjectMapper().readValue(new String(in.getBodyAsBinary()), ObservabilityRecord.class);
+        ObservabilityRecord observabilityRecord =this.objectMapper.readValue(new String(in.getBodyAsBinary()), ObservabilityRecord.class);
         this.observabilityRepository.save(observabilityRecord);
     }
 

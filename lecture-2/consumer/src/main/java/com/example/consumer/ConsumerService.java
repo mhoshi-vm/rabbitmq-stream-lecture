@@ -12,13 +12,16 @@ class ConsumerService {
 
     ConsumerRepository consumerRepository;
 
-    public ConsumerService(ConsumerRepository consumerRepository) {
+    ObjectMapper objectMapper;
+
+    public ConsumerService(ConsumerRepository consumerRepository, ObjectMapper objectMapper) {
         this.consumerRepository = consumerRepository;
+        this.objectMapper = objectMapper;
     }
 
     @RabbitListener(queues = "queue1")
     void Listener(String data) throws JsonProcessingException {
-        ConsumerRecord consumerRecord = new ObjectMapper().readValue(data, ConsumerRecord.class);
+        ConsumerRecord consumerRecord = this.objectMapper.readValue(data, ConsumerRecord.class);
         consumerRepository.save(consumerRecord);
     }
 
