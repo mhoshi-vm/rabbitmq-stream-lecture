@@ -14,8 +14,6 @@ import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.utility.DockerImageName;
 
-import java.io.IOException;
-
 @TestConfiguration(proxyBeanMethods = false)
 class TestcontainersConfiguration {
 
@@ -40,7 +38,7 @@ class TestcontainersConfiguration {
     }
 
     @Bean
-    StreamAdmin streamAdmin(Environment environment, RabbitMQContainer rabbitMQContainer) throws IOException, InterruptedException {
+    StreamAdmin streamAdmin(Environment environment) {
         return new StreamAdmin(environment, streamCreator -> streamCreator.stream("foo").create());
     }
 
