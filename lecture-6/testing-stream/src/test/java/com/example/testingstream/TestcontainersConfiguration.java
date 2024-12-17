@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.rabbit.stream.support.StreamAdmin;
 import org.springframework.test.context.DynamicPropertyRegistrar;
 import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.images.builder.Transferable;
 import org.testcontainers.utility.DockerImageName;
 
 import java.io.IOException;
@@ -21,8 +22,10 @@ class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     RabbitMQContainer rabbitContainer() {
+        String enabledPlugins = "[rabbitmq_stream].";
         return new RabbitMQContainer(DockerImageName.parse("rabbitmq:management-alpine"))
-                .withExposedPorts(5672, 15672, 5552);
+                .withExposedPorts(5672, 15672, 5552)
+                .withCopyToContainer(Transferable.of(enabledPlugins), "/etc/rabbitmq/enabled_plugins");
     }
 
     @Bean
@@ -38,7 +41,6 @@ class TestcontainersConfiguration {
 
     @Bean
     StreamAdmin streamAdmin(Environment environment, RabbitMQContainer rabbitMQContainer) throws IOException, InterruptedException {
-        rabbitMQContainer.execInContainer("rabbitmq-plugins", "enable", "rabbitmq_stream");
         return new StreamAdmin(environment, streamCreator -> streamCreator.stream("foo").create());
     }
 
