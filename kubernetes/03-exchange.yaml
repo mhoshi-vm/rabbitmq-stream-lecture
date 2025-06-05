@@ -1,0 +1,11 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: handson
+  namespace: rabbitmq-test
+spec:
+  name: handson
+  type: fanout
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-test

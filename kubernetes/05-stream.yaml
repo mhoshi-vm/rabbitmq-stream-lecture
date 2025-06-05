@@ -1,0 +1,23 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: stream1
+  namespace: rabbitmq-test
+spec:
+  name: stream1 # name of the queue
+  type: stream
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-test
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: stream-binding
+  namespace: rabbitmq-test
+spec:
+  source: handson # an existing exchange
+  destination: stream1
+  destinationType: queue # can be 'queue' or 'exchange'
+  rabbitmqClusterReference:
+    name: rabbitmq-test # rabbitmqCluster must exist in the same namespace as this resource

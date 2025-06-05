@@ -1,0 +1,22 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: queue1
+  namespace: rabbitmq-test
+spec:
+  name: queue1 # name of the queue
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-test
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: rabbitmq-binding
+  namespace: rabbitmq-test
+spec:
+  source: handson # an existing exchange
+  destination: queue1
+  destinationType: queue # can be 'queue' or 'exchange'
+  rabbitmqClusterReference:
+    name: rabbitmq-test # rabbitmqCluster must exist in the same namespace as this resource
