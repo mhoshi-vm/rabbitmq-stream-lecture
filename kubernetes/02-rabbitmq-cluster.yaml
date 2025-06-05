@@ -22,3 +22,5 @@ spec:
       - rabbitmq_stream
       - rabbitmq_stream_management
       - rabbitmq_peer_discovery_k8s
+      - rabbitmq_shovel
+      - rabbitmq_shovel_management
