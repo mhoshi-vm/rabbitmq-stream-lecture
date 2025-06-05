@@ -1,0 +1,38 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq-test2
+  namespace: rabbitmq-test
+spec:
+  override:
+    service:
+      spec:
+        ports:
+          - port: 5552
+            targetPort: 5552
+            name: stream
+  imagePullSecrets:
+    - name: regsecret
+  service:
+    type: LoadBalancer
+  rabbitmq:
+    additionalPlugins:
+      - rabbitmq_management
+      - rabbitmq_prometheus
+      - rabbitmq_stream
+      - rabbitmq_stream_management
+      - rabbitmq_peer_discovery_k8s
+      - rabbitmq_shovel
+      - rabbitmq_shovel_management
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+metadata:
+  name: shovel-exchange
+  namespace: rabbitmq-test
+spec:
+  name: shovel-exchange
+  type: fanout
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-test2

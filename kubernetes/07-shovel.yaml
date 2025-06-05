@@ -1,0 +1,49 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+metadata:
+  name: shovel-queue
+  namespace: rabbitmq-test
+spec:
+  name: shovel-queue # name of the queue
+  vhost: /
+  durable: true
+  rabbitmqClusterReference:
+    name: rabbitmq-test
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+metadata:
+  name: shovel-binding
+  namespace: rabbitmq-test
+spec:
+  source: handson # an existing exchange
+  destination: shovel-queue
+  destinationType: queue # can be 'queue' or 'exchange'
+  rabbitmqClusterReference:
+    name: rabbitmq-test # rabbitmqCluster must exist in the same namespace as this resource
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: shovel-secret
+  namespace: rabbitmq-test
+stringData:
+  srcUri: amqp://default_user_gsNfrhwFMwYPfBufOBZ:Su0PpRyVcnMZk-ee94Bw-qbUO1KVVHgj@rabbitmq-test.rabbitmq-test.svc
+  destUri: amqp://default_user_Pd9ih8vmwy3fHAruEQu:6G_Xqltluj9fRiVrkt6amMXzHayX2GOH@rabbitmq-test2.rabbitmq-test.svc
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Shovel
+metadata:
+  name: shovel
+  namespace: rabbitmq-test
+spec:
+  name: "shovel"
+  destProtocol: amqp091
+  srcProtocol: amqp091
+  vhost: /
+  uriSecret:
+    name: shovel-secret
+  srcQueue: "shovel-queue"
+  destExchange: "shovel-exchange"
+  rabbitmqClusterReference:
+    name: rabbitmq-test
